@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sync30</title>
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+padding:0;
+text-align:center;
+transition:0.3s;
+}
+
+.dark{
+background:#0b0b0b;
+color:white;
+}
+
+.light{
+background:white;
+color:black;
+}
+
+.container{
+padding:30px;
+}
+
+button{
+width:90%;
+height:55px;
+margin:10px;
+font-size:18px;
+border-radius:12px;
+border:none;
+background:#2563eb;
+color:white;
+}
+
+.switch{
+position:absolute;
+top:10px;
+right:10px;
+}
+
+</style>
+
+</head>
+
+<body class="dark">
+
+<div class="switch">
+<button onclick="toggleMode()">☀️ / 🌙</button>
+</div>
+
+<div class="container">
+
+<h1>Sync30</h1>
+
+<p>LipSync IA • Vidéo 30 secondes max</p>
+
+<button>Upload Video</button>
+
+<button>Upload Audio</button>
+
+<button>Generate</button>
+
+<p>5 essais gratuits</p>
+
+</div>
+
+<script>
+
+function toggleMode(){
+document.body.classList.toggle("dark");
+document.body.classList.toggle("light");
+}
+
+</script>
+
+</body>
+</html>
