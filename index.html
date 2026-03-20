@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sync30</title>
+  <link rel="stylesheet" href="style.css?v=20260320-2" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="dark">
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">S30</div>
+        <div class="brand-text">
+          <h1>Sync30</h1>
+          <p>LipSync IA</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="theme-btn" id="themeToggle" type="button">🌙</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="status-row">
+        <div class="mini-box">
+          <div class="label">Mode</div>
+          <div class="value" id="modeLabel">Utilisateur</div>
+        </div>
+        <div class="mini-box">
+          <div class="label">Temps disponible</div>
+          <div class="value" id="creditsLabel">0 s</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="status-row" style="grid-template-columns: 1fr auto auto; align-items: center;">
+        <div>
+          <h2 class="title" style="margin-bottom: 6px;">Compte</h2>
+          <p class="sub" id="authStatusText" style="margin-bottom: 0;">
+            Non connecté
+          </p>
+        </div>
+        <button class="btn btn-secondary" id="signUpBtn" type="button" style="width:auto; min-height:44px; padding:10px 14px;">
+          Inscription
+        </button>
+        <button class="btn btn-secondary" id="loginBtn" type="button" style="width:auto; min-height:44px; padding:10px 14px;">
+          Connexion
+        </button>
+      </div>
+
+      <div class="stack" style="margin-top: 14px;">
+        <button class="btn btn-secondary" id="resetPasswordBtn" type="button">
+          Mot de passe oublié
+        </button>
+        <button class="btn btn-secondary hidden" id="logoutBtn" type="button">
+          Déconnexion
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="pill" id="accountBadge">Compte standard</div>
+      <h2 class="title">Créer une vidéo synchronisée</h2>
+      <p class="sub" id="engineRulesText">
+        Ajoute une vidéo et un audio. VEED : 30 secondes maximum. Sync-up : 30 secondes maximum.
+      </p>
+
+      <details class="info-collapse">
+        <summary class="info-summary">Comment ça marche ?</summary>
+        <div class="info-content">
+          <p>Tu recharges du temps de génération.</p>
+          <p>Tu utilises uniquement la durée dont tu as besoin.</p>
+          <p>Le coût exact est affiché avant chaque génération.</p>
+          <p>Tu gardes le temps non utilisé pour plus tard.</p>
+          <p>Le mode rapide et le mode qualité utilisent la même règle d’arrondi.</p>
+          <p>Arrondi appliqué : de .0 à .5 on garde en bas, à partir de .6 on monte.</p>
+        </div>
+      </details>
+
+      <div class="stack">
+        <div class="upload-box">
+          <h3>Choisir le moteur lipsync</h3>
+          <p id="engineDescription">Sync-up = lip-sync économique.</p>
+          <select id="engineSelect" class="engine-select">
+            <option value="syncup">Mode rapide (Sync-up, 30 s max)</option>
+            <option value="veed">Mode qualité (VEED, 30 s max)</option>
+          </select>
+        </div>
+
+        <label class="upload-box" for="videoInput">
+          <h3>Ajouter une vidéo</h3>
+          <p id="videoRulesText">Formats supportés : MP4, WEBM, MOV, M4V, OGG • Sync-up : 30 secondes maximum • VEED : 30 secondes maximum</p>
+          <button class="btn btn-secondary" type="button">Choisir une vidéo</button>
+          <div class="file-name" id="videoFileName">Aucune vidéo sélectionnée</div>
+        </label>
+        <input
+          type="file"
+          id="videoInput"
+          accept=".mp4,.webm,.mov,.m4v,.ogg,video/mp4,video/webm,video/quicktime,video/x-m4v,video/ogg"
+        />
+
+        <label class="upload-box" for="audioInput">
+          <h3>Ajouter un audio</h3>
+          <p id="audioRulesText">Formats supportés : MP3, WAV, M4A, AAC, OGG, WEBM • Sync-up : 30 secondes maximum • VEED : 30 secondes maximum</p>
+          <button class="btn btn-secondary" type="button">Choisir un audio</button>
+          <div class="file-name" id="audioFileName">Aucun audio sélectionné</div>
+        </label>
+        <input
+          type="file"
+          id="audioInput"
+          accept=".mp3,.wav,.m4a,.aac,.ogg,.webm,audio/mpeg,audio/wav,audio/x-wav,audio/mp4,audio/aac,audio/ogg,audio/webm"
+        />
+
+        <div class="estimate-card hidden" id="estimateCard">
+          <h3>Estimation avant génération</h3>
+          <div class="estimate-grid">
+            <div class="estimate-item">
+              <div class="estimate-label">Mode</div>
+              <div class="estimate-value" id="estimateModeText">Rapide</div>
+            </div>
+            <div class="estimate-item">
+              <div class="estimate-label">Durée détectée</div>
+              <div class="estimate-value" id="estimateDurationText">0,0 s</div>
+            </div>
+            <div class="estimate-item">
+              <div class="estimate-label">Temps utilisé</div>
+              <div class="estimate-value" id="estimateCostText">0 s</div>
+            </div>
+            <div class="estimate-item">
+              <div class="estimate-label">Temps restant après génération</div>
+              <div class="estimate-value" id="estimateRemainingText">0 s</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="generateBtn" type="button">Générer</button>
+      </div>
+
+      <p class="hint" id="hintText">
+        Connecte-toi pour utiliser ton espace vidéo personnel.
+      </p>
+      <p class="warning hidden" id="warningText"></p>
+    </div>
+
+    <div class="card hidden" id="progressCard">
+      <h2 class="title">Synchronisation en cours…</h2>
+      <p class="sub">Préparation du traitement IA et génération de la vidéo.</p>
+
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">0%</div>
+      </div>
+    </div>
+
+    <div class="card result-box hidden" id="resultCard">
+      <h2 class="title">Résultat</h2>
+      <p class="sub">Prévisualise la vidéo puis télécharge-la.</p>
+      <video id="previewVideo" controls playsinline></video>
+      <div class="stack">
+        <a class="btn btn-primary" id="downloadBtn" download="sync30-result.mp4" href="#">Télécharger le résultat</a>
+        <button class="btn btn-secondary" id="resetBtn" type="button">Nouvelle génération</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="status-row" style="grid-template-columns: 1fr auto; align-items: center;">
+        <div>
+          <h2 class="title" style="margin-bottom: 6px;">Mes vidéos</h2>
+          <p class="sub" style="margin-bottom: 0;">
+            Les vidéos de ton compte apparaîtront ici automatiquement.
+          </p>
+        </div>
+        <button class="btn btn-secondary" id="refreshVideosBtn" type="button" style="width:auto; min-height:44px; padding:10px 14px;">
+          Actualiser
+        </button>
+      </div>
+
+      <div id="videosContainer" class="stack">
+        <div class="upload-box">
+          <h3>Chargement des vidéos...</h3>
+          <p>Les vidéos sauvegardées apparaîtront ici.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="title">Recharger du temps</h2>
+      <p class="sub">
+        Le paiement sera branché ensuite. Les packs ci-dessous servent de repère.
+      </p>
+
+      <div class="pricing">
+        <div class="price-card">
+          <div class="price-left">
+            <strong>Découverte - 4,19 €</strong>
+            <span>30 secondes disponibles</span>
+          </div>
+          <button class="buy-btn" type="button" disabled>Bientôt</button>
+        </div>
+
+        <div class="price-card">
+          <div class="price-left">
+            <strong>Créateur - 7,99 €</strong>
+            <span>70 secondes disponibles</span>
+          </div>
+          <button class="buy-btn" type="button" disabled>Bientôt</button>
+        </div>
+
+        <div class="price-card">
+          <div class="price-left">
+            <strong>Boost - 12,99 €</strong>
+            <span>130 secondes disponibles</span>
+          </div>
+          <button class="buy-btn" type="button" disabled>Bientôt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js?v=20260320-2"></script>
+</body>
+</html>
