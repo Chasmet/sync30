@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sync30</title>
-  <link rel="stylesheet" href="/sync30/style.css?v=20260427-3" />
+  <link rel="stylesheet" href="/sync30/style.css?v=20260427-4" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="dark">
@@ -17,7 +17,6 @@
           <p>LipSync IA</p>
         </div>
       </div>
-
       <div class="top-actions">
         <button class="theme-btn" id="themeToggle" type="button" aria-label="Changer le thème">🌙</button>
       </div>
@@ -30,8 +29,16 @@
           <div class="value" id="modeLabel">Public</div>
         </div>
         <div class="mini-box">
-          <div class="label">Temps disponible</div>
+          <div class="label">Moteur sélectionné</div>
           <div class="value" id="creditsLabel">0 s</div>
+        </div>
+        <div class="mini-box">
+          <div class="label">Nova disponible</div>
+          <div class="value" id="novaCreditsLabel">0 s</div>
+        </div>
+        <div class="mini-box">
+          <div class="label">Astra disponible</div>
+          <div class="value" id="astraCreditsLabel">0 s</div>
         </div>
       </div>
     </div>
@@ -42,11 +49,9 @@
           <h2 class="title" style="margin-bottom: 6px;">Compte</h2>
           <p class="sub" id="authStatusText" style="margin-bottom: 0;">Mode test public</p>
         </div>
-
         <button class="btn btn-secondary" id="signUpBtn" type="button" style="width:auto; min-height:44px; padding:10px 14px;">Inscription</button>
         <button class="btn btn-secondary" id="loginBtn" type="button" style="width:auto; min-height:44px; padding:10px 14px;">Connexion</button>
       </div>
-
       <div class="stack" style="margin-top: 14px;">
         <button class="btn btn-secondary" id="resetPasswordBtn" type="button">Mot de passe oublié</button>
         <button class="btn btn-secondary hidden" id="logoutBtn" type="button">Déconnexion</button>
@@ -55,7 +60,6 @@
 
     <div class="card">
       <div class="pill" id="accountBadge">Mode test public</div>
-
       <h2 class="title">Créer une vidéo synchronisée</h2>
       <p class="sub" id="engineRulesText">Ajoute une vidéo et un audio. Standard Nova : 9 secondes maximum.</p>
 
@@ -65,9 +69,8 @@
           <p>Tu choisis une vidéo et un audio.</p>
           <p>L’application calcule la durée utilisée avant génération.</p>
           <p>Le temps consommé dépend de la durée réelle, avec arrondi simple.</p>
-          <p>De .0 à .5 on garde en bas, à partir de .6 on monte.</p>
-          <p>Standard Nova = formule économique.</p>
-          <p>Premium Astra = formule haute qualité.</p>
+          <p>Nova = économique. Astra = qualité supérieure.</p>
+          <p>Les crédits Nova et Astra sont séparés.</p>
         </div>
       </details>
 
@@ -109,8 +112,7 @@
 
         <button class="btn btn-primary" id="generateBtn" type="button">Générer</button>
       </div>
-
-      <p class="hint" id="hintText">Mode test public actif. Standard Nova utilise le solde économique public.</p>
+      <p class="hint" id="hintText">Mode test public actif. Connecte-toi ou achète un pack pour générer.</p>
       <p class="warning hidden" id="warningText"></p>
     </div>
 
@@ -134,7 +136,7 @@
       <div class="status-row" style="grid-template-columns: 1fr auto; align-items: center;">
         <div>
           <h2 class="title" style="margin-bottom: 6px;">Mes vidéos</h2>
-          <p class="sub" style="margin-bottom: 0;">Les vidéos de ton compte apparaîtront ici automatiquement.</p>
+          <p class="sub" style="margin-bottom: 0;">Les vidéos de ton compte apparaissent ici automatiquement.</p>
         </div>
         <button class="btn btn-secondary" id="refreshVideosBtn" type="button" style="width:auto; min-height:44px; padding:10px 14px;">Actualiser</button>
       </div>
@@ -147,11 +149,9 @@
       <h2 class="title">Recharger du temps</h2>
       <p class="sub">Paiement sécurisé avec Revolut Pro. Après paiement, indique ton email Sync30 pour validation manuelle.</p>
       <div class="upload-box" style="text-align:left;">
-        <h3 style="margin-bottom:10px;">Comprendre la différence</h3>
-        <p style="margin-bottom:10px;">Standard Nova prend comme base le tarif économique.</p>
-        <p style="margin-bottom:10px;">Exemple : 2,19 € = 30 secondes de référence sur Standard Nova.</p>
-        <p style="margin-bottom:10px;">Premium Astra prend comme base le tarif qualité.</p>
-        <p style="margin-bottom:10px;">Exemple : 4,19 € = 30 secondes de référence sur Premium Astra.</p>
+        <h3 style="margin-bottom:10px;">Comprendre les packs</h3>
+        <p style="margin-bottom:10px;">Nova est économique et limité à 9 secondes par génération.</p>
+        <p style="margin-bottom:10px;">Astra est prévu pour un rendu plus qualitatif, jusqu’à 30 secondes affichées.</p>
         <p style="margin-bottom:0;">Le Pack Créateur donne 60 secondes Astra ou 110 secondes Nova selon ton choix après paiement.</p>
       </div>
       <div class="pricing">
@@ -159,7 +159,6 @@
         <div class="price-card"><div class="price-left"><strong>Premium Astra - 4,19 €</strong><span>30 secondes Premium Astra • qualité supérieure</span></div><button class="buy-btn" data-pack="astra" type="button">Acheter avec Revolut</button></div>
         <div class="price-card"><div class="price-left"><strong>Créateur - 7,99 €</strong><span>60 s Astra ou 110 s Nova • choix après paiement</span></div><button class="buy-btn" data-pack="creator" type="button">Acheter avec Revolut</button></div>
       </div>
-
       <div class="upload-box" style="text-align:left; margin-top:18px;">
         <h3>Paiement effectué ?</h3>
         <p>Après ton paiement Revolut, envoie le même email que ton compte Sync30 à l’admin pour recevoir tes crédits.</p>
@@ -168,7 +167,7 @@
     </div>
   </div>
 
-  <script src="/sync30/script.js?v=20260427-3"></script>
+  <script src="/sync30/script.js?v=20260427-4"></script>
   <script>
     (() => {
       const ADMIN_EMAIL = "skypieachannel" + "@" + "gmail.com";
@@ -178,16 +177,20 @@
         creator: "https://checkout.revolut.com/pay/78516714-39a6-4e2a-bef8-675ab3affa39"
       };
       const $ = (id) => document.getElementById(id);
-      function authText() {
-        return ($("authStatusText")?.textContent || "").toLowerCase();
-      }
-      function isAdminScreen() {
-        return authText().includes(ADMIN_EMAIL) || ($("modeLabel")?.textContent || "").toLowerCase().includes("admin");
-      }
+      const seconds = (v) => `${Number(v || 0)} s`;
+      function authText() { return ($("authStatusText")?.textContent || "").toLowerCase(); }
+      function isAdminScreen() { return authText().includes(ADMIN_EMAIL) || ($("modeLabel")?.textContent || "").toLowerCase().includes("admin"); }
       function hasUnlimitedDisplayed() {
         const credits = ($("creditsLabel")?.textContent || "").toLowerCase();
         const estimate = ($("estimateRemainingText")?.textContent || "").toLowerCase();
         return credits.includes("999999") || credits.includes("illimité") || estimate.includes("999999") || estimate.includes("illimité");
+      }
+      function updateDetailedCredits() {
+        const admin = isAdminScreen();
+        const nova = typeof walletState !== "undefined" ? Number(walletState.syncupSecondsBalance || 0) : 0;
+        const astra = typeof walletState !== "undefined" ? Number(walletState.premiumSecondsBalance || 0) : 0;
+        if ($("novaCreditsLabel")) $("novaCreditsLabel").textContent = admin ? "Illimité" : seconds(nova);
+        if ($("astraCreditsLabel")) $("astraCreditsLabel").textContent = admin ? "Illimité" : seconds(astra);
       }
       function lockNonAdminUnlimited() {
         const admin = isAdminScreen();
@@ -199,6 +202,7 @@
           if ($("hintText")) $("hintText").textContent = publicMode ? "Mode test public actif. Connecte-toi ou demande une validation admin pour générer." : "Compte connecté. Achète un pack Revolut ou attends la validation admin pour recevoir tes crédits.";
           if ($("estimateRemainingText") && hasUnlimitedDisplayed()) $("estimateRemainingText").textContent = "0 s";
         }
+        updateDetailedCredits();
       }
       function setupRevolutButtons() {
         document.querySelectorAll(".buy-btn[data-pack]").forEach((button) => {
