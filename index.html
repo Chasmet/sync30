@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sync30</title>
-  <link rel="stylesheet" href="/sync30/style.css?v=20260427-1" />
+  <link rel="stylesheet" href="/sync30/style.css?v=20260427-2" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="dark">
@@ -145,28 +145,38 @@
 
     <div class="card">
       <h2 class="title">Recharger du temps</h2>
-      <p class="sub">Standard Nova = référence économique. Premium Astra = référence qualité.</p>
+      <p class="sub">Paiement sécurisé avec Revolut Pro. Après paiement, indique ton email Sync30 pour validation manuelle.</p>
       <div class="upload-box" style="text-align:left;">
         <h3 style="margin-bottom:10px;">Comprendre la différence</h3>
         <p style="margin-bottom:10px;">Standard Nova prend comme base le tarif économique.</p>
         <p style="margin-bottom:10px;">Exemple : 2,19 € = 30 secondes de référence sur Standard Nova.</p>
-        <p style="margin-bottom:10px;">En comparaison qualité, cette même valeur correspond à environ 16 secondes de Premium Astra.</p>
         <p style="margin-bottom:10px;">Premium Astra prend comme base le tarif qualité.</p>
         <p style="margin-bottom:10px;">Exemple : 4,19 € = 30 secondes de référence sur Premium Astra.</p>
-        <p style="margin-bottom:0;">En comparaison économique, cette même valeur correspond à environ 57 secondes de Standard Nova.</p>
+        <p style="margin-bottom:0;">Le Pack Créateur donne 60 secondes Astra ou 110 secondes Nova selon ton choix après paiement.</p>
       </div>
       <div class="pricing">
-        <div class="price-card"><div class="price-left"><strong>Standard Nova - 2,19 €</strong><span>Référence : 30 secondes Standard Nova • équivalent ≈ 16 secondes Premium Astra</span></div><button class="buy-btn" type="button" disabled>Bientôt</button></div>
-        <div class="price-card"><div class="price-left"><strong>Premium Astra - 4,19 €</strong><span>Référence : 30 secondes Premium Astra • équivalent ≈ 57 secondes Standard Nova</span></div><button class="buy-btn" type="button" disabled>Bientôt</button></div>
-        <div class="price-card"><div class="price-left"><strong>Créateur - 7,99 €</strong><span>Pack futur à définir</span></div><button class="buy-btn" type="button" disabled>Bientôt</button></div>
+        <div class="price-card"><div class="price-left"><strong>Standard Nova - 2,19 €</strong><span>30 secondes Standard Nova • économique</span></div><button class="buy-btn" data-pack="nova" type="button">Acheter avec Revolut</button></div>
+        <div class="price-card"><div class="price-left"><strong>Premium Astra - 4,19 €</strong><span>30 secondes Premium Astra • qualité supérieure</span></div><button class="buy-btn" data-pack="astra" type="button">Acheter avec Revolut</button></div>
+        <div class="price-card"><div class="price-left"><strong>Créateur - 7,99 €</strong><span>60 s Astra ou 110 s Nova • choix après paiement</span></div><button class="buy-btn" data-pack="creator" type="button">Acheter avec Revolut</button></div>
+      </div>
+
+      <div class="upload-box" style="text-align:left; margin-top:18px;">
+        <h3>Paiement effectué ?</h3>
+        <p>Après ton paiement Revolut, envoie le même email que ton compte Sync30 à l’admin pour recevoir tes crédits.</p>
+        <p><strong>Validation :</strong> 2,19 € = +30 s Nova • 4,19 € = +30 s Astra • 7,99 € = +60 s Astra ou +110 s Nova.</p>
       </div>
     </div>
   </div>
 
-  <script src="/sync30/script.js?v=20260427-1"></script>
+  <script src="/sync30/script.js?v=20260427-2"></script>
   <script>
     (() => {
       const ADMIN_EMAIL = "skypieachannel" + "@" + "gmail.com";
+      const REVOLUT_LINKS = {
+        nova: "https://checkout.revolut.com/pay/b6ca579f-e0de-4f03-9b3d-98c50839486f",
+        astra: "https://checkout.revolut.com/pay/a068d6d7-0b65-47f7-bdf4-ce953458eab6",
+        creator: "https://checkout.revolut.com/pay/78516714-39a6-4e2a-bef8-675ab3affa39"
+      };
       const $ = (id) => document.getElementById(id);
       function isAdminScreen() {
         const auth = ($("authStatusText")?.textContent || "").toLowerCase();
@@ -183,9 +193,27 @@
           if ($("estimateRemainingText") && $("estimateRemainingText").textContent === "999999 s") $("estimateRemainingText").textContent = "0 s";
         }
       }
+      function setupRevolutButtons() {
+        document.querySelectorAll(".buy-btn[data-pack]").forEach((button) => {
+          const pack = button.dataset.pack;
+          const url = REVOLUT_LINKS[pack];
+          button.disabled = false;
+          button.textContent = "Acheter avec Revolut";
+          button.onclick = () => {
+            const emailText = ($("authStatusText")?.textContent || "").replace("Connecté :", "").trim();
+            const message = emailText && !emailText.toLowerCase().includes("mode test")
+              ? `Après paiement, indique cet email dans Revolut ou à l’admin : ${emailText}`
+              : "Après paiement, crée-toi un compte Sync30 puis indique le même email à l’admin.";
+            alert(message);
+            window.open(url, "_blank", "noopener,noreferrer");
+          };
+        });
+      }
       window.addEventListener("load", () => {
         lockPublicCredits();
+        setupRevolutButtons();
         setInterval(lockPublicCredits, 500);
+        setInterval(setupRevolutButtons, 1500);
       });
     })();
   </script>
