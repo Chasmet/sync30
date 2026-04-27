@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Sync30</title>
+  <link rel="stylesheet" href="/sync30/style.css?v=20260427-2" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="dark">
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">S30</div>
+        <div class="brand-text">
+          <h1>Admin Sync30</h1>
+          <p>Validation Revolut Pro</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="title">Connexion admin</h2>
+      <p class="sub" id="adminStatus">Non connecté</p>
+      <div class="stack">
+        <button class="btn btn-primary" id="loginBtn" type="button">Connexion admin</button>
+        <button class="btn btn-secondary hidden" id="logoutBtn" type="button">Déconnexion</button>
+        <a class="btn btn-secondary" href="/sync30/">Retour à Sync30</a>
+      </div>
+    </div>
+
+    <div class="card hidden" id="adminPanel">
+      <h2 class="title">Valider un paiement Revolut</h2>
+      <p class="sub">Vérifie d’abord le paiement dans Revolut Pro, puis ajoute les crédits ici.</p>
+
+      <div class="stack">
+        <div class="upload-box" style="text-align:left;">
+          <h3>Email du client</h3>
+          <input id="clientEmail" type="email" placeholder="email du compte Sync30" style="width:100%;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.18);padding:12px;background:rgba(0,0,0,.25);color:white;font-size:16px;" />
+        </div>
+
+        <div class="upload-box" style="text-align:left;">
+          <h3>Pack payé</h3>
+          <select id="packSelect" class="engine-select">
+            <option value="nova">Nova 2,19 € - +30 s Nova</option>
+            <option value="astra">Astra 4,19 € - +30 s Astra</option>
+            <option value="creator_nova">Créateur 7,99 € - +110 s Nova</option>
+            <option value="creator_astra">Créateur 7,99 € - +60 s Astra</option>
+          </select>
+        </div>
+
+        <button class="btn btn-secondary" id="findBtn" type="button">Vérifier le client</button>
+        <button class="btn btn-primary" id="validateBtn" type="button">Valider et ajouter les crédits</button>
+        <p class="warning hidden" id="messageBox"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://hfzbkgnccyyrotijnlda.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_j_dMdudOZakRbeKQQRVWDQ_TYI2mwka";
+    const ADMIN_EMAIL = "skypieachannel" + "@" + "gmail.com";
+    const ADMIN_API_URL = "https://sync30-paddle-api.onrender.com";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    const adminStatus = document.getElementById("adminStatus");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const adminPanel = document.getElementById("adminPanel");
+    const clientEmail = document.getElementById("clientEmail");
+    const packSelect = document.getElementById("packSelect");
+    const findBtn = document.getElementById("findBtn");
+    const validateBtn = document.getElementById("validateBtn");
+    const messageBox = document.getElementById("messageBox");
+
+    let currentSession = null;
+
+    function showMessage(text, danger = false) {
+      messageBox.textContent = text;
+      messageBox.classList.remove("hidden");
+      messageBox.style.color = danger ? "#ff8a8a" : "#8affb4";
+    }
+
+    function hideMessage() {
+      messageBox.textContent = "";
+      messageBox.classList.add("hidden");
+    }
+
+    async function getToken() {
+      const { data } = await supabaseClient.auth.getSession();
+      return data?.session?.access_token || "";
+    }
+
+    async function refreshUI() {
+      const { data } = await supabaseClient.auth.getSession();
+      currentSession = data?.session || null;
+      const email = String(currentSession?.user?.email || "").toLowerCase();
+
+      if (email === ADMIN_EMAIL) {
+        adminStatus.textContent = `Connecté admin : ${email}`;
+        loginBtn.classList.add("hidden");
+        logoutBtn.classList.remove("hidden");
+        adminPanel.classList.remove("hidden");
+      } else if (email) {
+        adminStatus.textContent = "Compte connecté, mais pas admin.";
+        loginBtn.classList.add("hidden");
+        logoutBtn.classList.remove("hidden");
+        adminPanel.classList.add("hidden");
+      } else {
+        adminStatus.textContent = "Non connecté";
+        loginBtn.classList.remove("hidden");
+        logoutBtn.classList.add("hidden");
+        adminPanel.classList.add("hidden");
+      }
+    }
+
+    async function loginAdmin() {
+      hideMessage();
+      const email = prompt("Email admin :");
+      if (!email) return;
+      const password = prompt("Mot de passe admin :");
+      if (!password) return;
+
+      const { error } = await supabaseClient.auth.signInWithPassword({ email: email.trim(), password });
+      if (error) {
+        showMessage(`Erreur connexion : ${error.message}`, true);
+        return;
+      }
+      await refreshUI();
+    }
+
+    async function logoutAdmin() {
+      await supabaseClient.auth.signOut();
+      await refreshUI();
+    }
+
+    async function adminPost(path, body) {
+      const token = await getToken();
+      const response = await fetch(`${ADMIN_API_URL}${path}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.ok) throw new Error(data.error || "Erreur serveur admin");
+      return data;
+    }
+
+    async function findClient() {
+      hideMessage();
+      try {
+        const email = clientEmail.value.trim();
+        const data = await adminPost("/admin/find-user", { userEmail: email });
+        showMessage(`Client trouvé. Nova : ${data.syncupSecondsBalance}s • Astra : ${data.premiumSecondsBalance}s`);
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    }
+
+    async function validatePayment() {
+      hideMessage();
+      try {
+        const email = clientEmail.value.trim();
+        const pack = packSelect.value;
+        const ok = confirm(`Valider le paiement Revolut pour ${email} ?`);
+        if (!ok) return;
+        const data = await adminPost("/admin/add-credits", { userEmail: email, pack });
+        showMessage(`Validé : ${data.label}. Nouveau solde Nova ${data.syncupSecondsBalance}s • Astra ${data.premiumSecondsBalance}s`);
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    }
+
+    loginBtn.onclick = loginAdmin;
+    logoutBtn.onclick = logoutAdmin;
+    findBtn.onclick = findClient;
+    validateBtn.onclick = validatePayment;
+    refreshUI();
+  </script>
+</body>
+</html>
