@@ -1,0 +1,22 @@
+{
+  "name": "Sync30 - LipSync IA",
+  "short_name": "Sync30",
+  "description": "Application mobile Sync30 pour créer des vidéos avec synchronisation labiale IA.",
+  "start_url": "/sync30/?source=pwa",
+  "scope": "/sync30/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020714",
+  "theme_color": "#9cff4f",
+  "categories": ["video", "productivity", "utilities"],
+  "lang": "fr-FR",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/sync30/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
