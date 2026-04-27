@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sync30</title>
-  <link rel="stylesheet" href="/sync30/style.css?v=20260427-4" />
+  <link rel="stylesheet" href="/sync30/style.css?v=20260427-5" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="dark">
@@ -24,31 +24,16 @@
 
     <div class="card">
       <div class="status-row">
-        <div class="mini-box">
-          <div class="label">Mode</div>
-          <div class="value" id="modeLabel">Public</div>
-        </div>
-        <div class="mini-box">
-          <div class="label">Moteur sélectionné</div>
-          <div class="value" id="creditsLabel">0 s</div>
-        </div>
-        <div class="mini-box">
-          <div class="label">Nova disponible</div>
-          <div class="value" id="novaCreditsLabel">0 s</div>
-        </div>
-        <div class="mini-box">
-          <div class="label">Astra disponible</div>
-          <div class="value" id="astraCreditsLabel">0 s</div>
-        </div>
+        <div class="mini-box"><div class="label">Mode</div><div class="value" id="modeLabel">Public</div></div>
+        <div class="mini-box"><div class="label">Moteur sélectionné</div><div class="value" id="creditsLabel">0 s</div></div>
+        <div class="mini-box"><div class="label">Nova disponible</div><div class="value" id="novaCreditsLabel">0 s</div></div>
+        <div class="mini-box"><div class="label">Astra disponible</div><div class="value" id="astraCreditsLabel">0 s</div></div>
       </div>
     </div>
 
     <div class="card">
       <div class="status-row" style="grid-template-columns: 1fr auto auto; align-items: center;">
-        <div>
-          <h2 class="title" style="margin-bottom: 6px;">Compte</h2>
-          <p class="sub" id="authStatusText" style="margin-bottom: 0;">Mode test public</p>
-        </div>
+        <div><h2 class="title" style="margin-bottom: 6px;">Compte</h2><p class="sub" id="authStatusText" style="margin-bottom: 0;">Mode test public</p></div>
         <button class="btn btn-secondary" id="signUpBtn" type="button" style="width:auto; min-height:44px; padding:10px 14px;">Inscription</button>
         <button class="btn btn-secondary" id="loginBtn" type="button" style="width:auto; min-height:44px; padding:10px 14px;">Connexion</button>
       </div>
@@ -62,170 +47,84 @@
       <div class="pill" id="accountBadge">Mode test public</div>
       <h2 class="title">Créer une vidéo synchronisée</h2>
       <p class="sub" id="engineRulesText">Ajoute une vidéo et un audio. Standard Nova : 9 secondes maximum.</p>
-
       <details class="info-collapse">
         <summary class="info-summary">Comment ça marche ?</summary>
         <div class="info-content">
-          <p>Tu choisis une vidéo et un audio.</p>
-          <p>L’application calcule la durée utilisée avant génération.</p>
-          <p>Le temps consommé dépend de la durée réelle, avec arrondi simple.</p>
-          <p>Nova = économique. Astra = qualité supérieure.</p>
-          <p>Les crédits Nova et Astra sont séparés.</p>
+          <p>Tu choisis une vidéo et un audio.</p><p>L’application calcule la durée utilisée avant génération.</p><p>Le temps consommé dépend de la durée réelle, avec arrondi simple.</p><p>Nova = économique. Astra = qualité supérieure.</p><p>Les crédits Nova et Astra sont séparés.</p>
         </div>
       </details>
-
       <div class="stack">
-        <div class="upload-box">
-          <h3>Choisir le moteur lipsync</h3>
-          <p id="engineDescription">Standard Nova = formule économique. Tarif indicatif : 2,19 € pour 30 secondes.</p>
-          <select id="engineSelect" class="engine-select" aria-label="Choisir le moteur lipsync">
-            <option value="syncup">Standard Nova</option>
-            <option value="veed">Premium Astra - qualité</option>
-          </select>
-        </div>
-
-        <label class="upload-box" for="videoInput">
-          <h3>Ajouter une vidéo</h3>
-          <p id="videoRulesText">Formats supportés : MP4, WEBM, MOV, M4V, OGG • Standard Nova : 9 secondes maximum.</p>
-          <button class="btn btn-secondary" type="button">Choisir une vidéo</button>
-          <div class="file-name" id="videoFileName">Aucune vidéo sélectionnée</div>
-        </label>
+        <div class="upload-box"><h3>Choisir le moteur lipsync</h3><p id="engineDescription">Standard Nova = formule économique. Tarif indicatif : 2,19 € pour 30 secondes.</p><select id="engineSelect" class="engine-select" aria-label="Choisir le moteur lipsync"><option value="syncup">Standard Nova</option><option value="veed">Premium Astra - qualité</option></select></div>
+        <label class="upload-box" for="videoInput"><h3>Ajouter une vidéo</h3><p id="videoRulesText">Formats supportés : MP4, WEBM, MOV, M4V, OGG • Standard Nova : 9 secondes maximum.</p><button class="btn btn-secondary" type="button">Choisir une vidéo</button><div class="file-name" id="videoFileName">Aucune vidéo sélectionnée</div></label>
         <input type="file" id="videoInput" accept=".mp4,.webm,.mov,.m4v,.ogg,video/mp4,video/webm,video/quicktime,video/x-m4v,video/ogg" />
-
-        <label class="upload-box" for="audioInput">
-          <h3>Ajouter un audio</h3>
-          <p id="audioRulesText">Formats supportés : MP3, WAV, M4A, AAC, OGG, WEBM • Standard Nova : 9 secondes maximum.</p>
-          <button class="btn btn-secondary" type="button">Choisir un audio</button>
-          <div class="file-name" id="audioFileName">Aucun audio sélectionné</div>
-        </label>
+        <label class="upload-box" for="audioInput"><h3>Ajouter un audio</h3><p id="audioRulesText">Formats supportés : MP3, WAV, M4A, AAC, OGG, WEBM • Standard Nova : 9 secondes maximum.</p><button class="btn btn-secondary" type="button">Choisir un audio</button><div class="file-name" id="audioFileName">Aucun audio sélectionné</div></label>
         <input type="file" id="audioInput" accept=".mp3,.wav,.m4a,.aac,.ogg,.webm,audio/mpeg,audio/wav,audio/x-wav,audio/mp4,audio/aac,audio/ogg,audio/webm" />
-
-        <div class="estimate-card hidden" id="estimateCard">
-          <h3>Estimation avant génération</h3>
-          <div class="estimate-grid">
-            <div class="estimate-item"><div class="estimate-label">Mode</div><div class="estimate-value" id="estimateModeText">Standard Nova</div></div>
-            <div class="estimate-item"><div class="estimate-label">Durée détectée</div><div class="estimate-value" id="estimateDurationText">0,0 s</div></div>
-            <div class="estimate-item"><div class="estimate-label">Temps utilisé</div><div class="estimate-value" id="estimateCostText">0 s</div></div>
-            <div class="estimate-item"><div class="estimate-label">Temps restant après génération</div><div class="estimate-value" id="estimateRemainingText">0 s</div></div>
-          </div>
-        </div>
-
+        <div class="estimate-card hidden" id="estimateCard"><h3>Estimation avant génération</h3><div class="estimate-grid"><div class="estimate-item"><div class="estimate-label">Mode</div><div class="estimate-value" id="estimateModeText">Standard Nova</div></div><div class="estimate-item"><div class="estimate-label">Durée détectée</div><div class="estimate-value" id="estimateDurationText">0,0 s</div></div><div class="estimate-item"><div class="estimate-label">Temps utilisé</div><div class="estimate-value" id="estimateCostText">0 s</div></div><div class="estimate-item"><div class="estimate-label">Temps restant après génération</div><div class="estimate-value" id="estimateRemainingText">0 s</div></div></div></div>
         <button class="btn btn-primary" id="generateBtn" type="button">Générer</button>
       </div>
-      <p class="hint" id="hintText">Mode test public actif. Connecte-toi ou achète un pack pour générer.</p>
-      <p class="warning hidden" id="warningText"></p>
+      <p class="hint" id="hintText">Mode test public actif. Connecte-toi ou achète un pack pour générer.</p><p class="warning hidden" id="warningText"></p>
     </div>
 
-    <div class="card hidden" id="progressCard">
-      <h2 class="title">Synchronisation en cours…</h2>
-      <p class="sub">Préparation du traitement IA et génération de la vidéo.</p>
-      <div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-text" id="progressText">0%</div></div>
-    </div>
-
-    <div class="card result-box hidden" id="resultCard">
-      <h2 class="title">Résultat</h2>
-      <p class="sub">Prévisualise la vidéo puis télécharge-la.</p>
-      <video id="previewVideo" controls playsinline></video>
-      <div class="stack">
-        <a class="btn btn-primary" id="downloadBtn" download="sync30-result.mp4" href="#">Télécharger le résultat</a>
-        <button class="btn btn-secondary" id="resetBtn" type="button">Nouvelle génération</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="status-row" style="grid-template-columns: 1fr auto; align-items: center;">
-        <div>
-          <h2 class="title" style="margin-bottom: 6px;">Mes vidéos</h2>
-          <p class="sub" style="margin-bottom: 0;">Les vidéos de ton compte apparaissent ici automatiquement.</p>
-        </div>
-        <button class="btn btn-secondary" id="refreshVideosBtn" type="button" style="width:auto; min-height:44px; padding:10px 14px;">Actualiser</button>
-      </div>
-      <div id="videosContainer" class="stack">
-        <div class="upload-box"><h3>Chargement des vidéos...</h3><p>Les vidéos sauvegardées apparaîtront ici.</p></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2 class="title">Recharger du temps</h2>
-      <p class="sub">Paiement sécurisé avec Revolut Pro. Après paiement, indique ton email Sync30 pour validation manuelle.</p>
-      <div class="upload-box" style="text-align:left;">
-        <h3 style="margin-bottom:10px;">Comprendre les packs</h3>
-        <p style="margin-bottom:10px;">Nova est économique et limité à 9 secondes par génération.</p>
-        <p style="margin-bottom:10px;">Astra est prévu pour un rendu plus qualitatif, jusqu’à 30 secondes affichées.</p>
-        <p style="margin-bottom:0;">Le Pack Créateur donne 60 secondes Astra ou 110 secondes Nova selon ton choix après paiement.</p>
-      </div>
-      <div class="pricing">
-        <div class="price-card"><div class="price-left"><strong>Standard Nova - 2,19 €</strong><span>30 secondes Standard Nova • économique</span></div><button class="buy-btn" data-pack="nova" type="button">Acheter avec Revolut</button></div>
-        <div class="price-card"><div class="price-left"><strong>Premium Astra - 4,19 €</strong><span>30 secondes Premium Astra • qualité supérieure</span></div><button class="buy-btn" data-pack="astra" type="button">Acheter avec Revolut</button></div>
-        <div class="price-card"><div class="price-left"><strong>Créateur - 7,99 €</strong><span>60 s Astra ou 110 s Nova • choix après paiement</span></div><button class="buy-btn" data-pack="creator" type="button">Acheter avec Revolut</button></div>
-      </div>
-      <div class="upload-box" style="text-align:left; margin-top:18px;">
-        <h3>Paiement effectué ?</h3>
-        <p>Après ton paiement Revolut, envoie le même email que ton compte Sync30 à l’admin pour recevoir tes crédits.</p>
-        <p><strong>Validation :</strong> 2,19 € = +30 s Nova • 4,19 € = +30 s Astra • 7,99 € = +60 s Astra ou +110 s Nova.</p>
-      </div>
-    </div>
+    <div class="card hidden" id="progressCard"><h2 class="title">Synchronisation en cours…</h2><p class="sub">Préparation du traitement IA et génération de la vidéo.</p><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-text" id="progressText">0%</div></div></div>
+    <div class="card result-box hidden" id="resultCard"><h2 class="title">Résultat</h2><p class="sub">Prévisualise la vidéo puis télécharge-la.</p><video id="previewVideo" controls playsinline></video><div class="stack"><a class="btn btn-primary" id="downloadBtn" download="sync30-result.mp4" href="#">Télécharger le résultat</a><button class="btn btn-secondary" id="resetBtn" type="button">Nouvelle génération</button></div></div>
+    <div class="card"><div class="status-row" style="grid-template-columns: 1fr auto; align-items: center;"><div><h2 class="title" style="margin-bottom: 6px;">Mes vidéos</h2><p class="sub" style="margin-bottom: 0;">Les vidéos de ton compte apparaissent ici automatiquement.</p></div><button class="btn btn-secondary" id="refreshVideosBtn" type="button" style="width:auto; min-height:44px; padding:10px 14px;">Actualiser</button></div><div id="videosContainer" class="stack"><div class="upload-box"><h3>Chargement des vidéos...</h3><p>Les vidéos sauvegardées apparaîtront ici.</p></div></div></div>
+    <div class="card"><h2 class="title">Recharger du temps</h2><p class="sub">Paiement sécurisé avec Revolut Pro. Après paiement, indique ton email Sync30 pour validation manuelle.</p><div class="upload-box" style="text-align:left;"><h3 style="margin-bottom:10px;">Comprendre les packs</h3><p style="margin-bottom:10px;">Nova est économique et limité à 9 secondes par génération.</p><p style="margin-bottom:10px;">Astra est prévu pour un rendu plus qualitatif, jusqu’à 30 secondes affichées.</p><p style="margin-bottom:0;">Le Pack Créateur donne 60 secondes Astra ou 110 secondes Nova selon ton choix après paiement.</p></div><div class="pricing"><div class="price-card"><div class="price-left"><strong>Standard Nova - 2,19 €</strong><span>30 secondes Standard Nova • économique</span></div><button class="buy-btn" data-pack="nova" type="button">Acheter avec Revolut</button></div><div class="price-card"><div class="price-left"><strong>Premium Astra - 4,19 €</strong><span>30 secondes Premium Astra • qualité supérieure</span></div><button class="buy-btn" data-pack="astra" type="button">Acheter avec Revolut</button></div><div class="price-card"><div class="price-left"><strong>Créateur - 7,99 €</strong><span>60 s Astra ou 110 s Nova • choix après paiement</span></div><button class="buy-btn" data-pack="creator" type="button">Acheter avec Revolut</button></div></div><div class="upload-box" style="text-align:left; margin-top:18px;"><h3>Paiement effectué ?</h3><p>Après ton paiement Revolut, envoie le même email que ton compte Sync30 à l’admin pour recevoir tes crédits.</p><p><strong>Validation :</strong> 2,19 € = +30 s Nova • 4,19 € = +30 s Astra • 7,99 € = +60 s Astra ou +110 s Nova.</p></div></div>
   </div>
-
-  <script src="/sync30/script.js?v=20260427-4"></script>
+  <script src="/sync30/script.js?v=20260427-5"></script>
   <script>
     (() => {
       const ADMIN_EMAIL = "skypieachannel" + "@" + "gmail.com";
-      const REVOLUT_LINKS = {
-        nova: "https://checkout.revolut.com/pay/b6ca579f-e0de-4f03-9b3d-98c50839486f",
-        astra: "https://checkout.revolut.com/pay/a068d6d7-0b65-47f7-bdf4-ce953458eab6",
-        creator: "https://checkout.revolut.com/pay/78516714-39a6-4e2a-bef8-675ab3affa39"
-      };
+      const REVOLUT_LINKS = { nova: "https://checkout.revolut.com/pay/b6ca579f-e0de-4f03-9b3d-98c50839486f", astra: "https://checkout.revolut.com/pay/a068d6d7-0b65-47f7-bdf4-ce953458eab6", creator: "https://checkout.revolut.com/pay/78516714-39a6-4e2a-bef8-675ab3affa39" };
       const $ = (id) => document.getElementById(id);
-      const seconds = (v) => `${Number(v || 0)} s`;
+      const safeCredit = (value, admin) => {
+        if (admin) return "Illimité";
+        const n = Number(value || 0);
+        if (!Number.isFinite(n) || n >= 999999) return "0 s";
+        return `${Math.max(0, n)} s`;
+      };
       function authText() { return ($("authStatusText")?.textContent || "").toLowerCase(); }
       function isAdminScreen() { return authText().includes(ADMIN_EMAIL) || ($("modeLabel")?.textContent || "").toLowerCase().includes("admin"); }
-      function hasUnlimitedDisplayed() {
-        const credits = ($("creditsLabel")?.textContent || "").toLowerCase();
-        const estimate = ($("estimateRemainingText")?.textContent || "").toLowerCase();
-        return credits.includes("999999") || credits.includes("illimité") || estimate.includes("999999") || estimate.includes("illimité");
-      }
       function updateDetailedCredits() {
         const admin = isAdminScreen();
         const nova = typeof walletState !== "undefined" ? Number(walletState.syncupSecondsBalance || 0) : 0;
         const astra = typeof walletState !== "undefined" ? Number(walletState.premiumSecondsBalance || 0) : 0;
-        if ($("novaCreditsLabel")) $("novaCreditsLabel").textContent = admin ? "Illimité" : seconds(nova);
-        if ($("astraCreditsLabel")) $("astraCreditsLabel").textContent = admin ? "Illimité" : seconds(astra);
+        if ($("novaCreditsLabel")) $("novaCreditsLabel").textContent = safeCredit(nova, admin);
+        if ($("astraCreditsLabel")) $("astraCreditsLabel").textContent = safeCredit(astra, admin);
+      }
+      function hasUnlimitedDisplayed() {
+        return ["creditsLabel", "estimateRemainingText", "novaCreditsLabel", "astraCreditsLabel"].some((id) => {
+          const t = ($(id)?.textContent || "").toLowerCase();
+          return t.includes("999999") || t.includes("illimité");
+        });
       }
       function lockNonAdminUnlimited() {
         const admin = isAdminScreen();
         const publicMode = authText().includes("mode test public") || !authText().includes("connecté");
         if (!admin && (publicMode || hasUnlimitedDisplayed())) {
           if ($("modeLabel")) $("modeLabel").textContent = publicMode ? "Public" : "Connecté";
-          if ($("creditsLabel") && hasUnlimitedDisplayed()) $("creditsLabel").textContent = "0 s";
+          if ($("creditsLabel")) $("creditsLabel").textContent = "0 s";
+          if ($("novaCreditsLabel")) $("novaCreditsLabel").textContent = "0 s";
+          if ($("astraCreditsLabel")) $("astraCreditsLabel").textContent = "0 s";
           if ($("accountBadge")) $("accountBadge").textContent = publicMode ? "Mode test public" : "Compte personnel";
           if ($("hintText")) $("hintText").textContent = publicMode ? "Mode test public actif. Connecte-toi ou demande une validation admin pour générer." : "Compte connecté. Achète un pack Revolut ou attends la validation admin pour recevoir tes crédits.";
-          if ($("estimateRemainingText") && hasUnlimitedDisplayed()) $("estimateRemainingText").textContent = "0 s";
+          if ($("estimateRemainingText")) $("estimateRemainingText").textContent = "0 s";
         }
         updateDetailedCredits();
       }
       function setupRevolutButtons() {
         document.querySelectorAll(".buy-btn[data-pack]").forEach((button) => {
-          const pack = button.dataset.pack;
-          const url = REVOLUT_LINKS[pack];
+          const url = REVOLUT_LINKS[button.dataset.pack];
           button.disabled = false;
           button.textContent = "Acheter avec Revolut";
           button.onclick = () => {
             const emailText = ($("authStatusText")?.textContent || "").replace("Connecté :", "").trim();
-            const message = emailText && !emailText.toLowerCase().includes("mode test")
-              ? `Après paiement, indique cet email dans Revolut ou à l’admin : ${emailText}`
-              : "Après paiement, crée-toi un compte Sync30 puis indique le même email à l’admin.";
+            const message = emailText && !emailText.toLowerCase().includes("mode test") ? `Après paiement, indique cet email dans Revolut ou à l’admin : ${emailText}` : "Après paiement, crée-toi un compte Sync30 puis indique le même email à l’admin.";
             alert(message);
             window.open(url, "_blank", "noopener,noreferrer");
           };
         });
       }
-      window.addEventListener("load", () => {
-        lockNonAdminUnlimited();
-        setupRevolutButtons();
-        setInterval(lockNonAdminUnlimited, 300);
-        setInterval(setupRevolutButtons, 1500);
-      });
+      window.addEventListener("load", () => { lockNonAdminUnlimited(); setupRevolutButtons(); setInterval(lockNonAdminUnlimited, 300); setInterval(setupRevolutButtons, 1500); });
     })();
   </script>
 </body>
