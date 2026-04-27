@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sync30</title>
-  <link rel="stylesheet" href="/sync30/style.css?v=20260427-2" />
+  <link rel="stylesheet" href="/sync30/style.css?v=20260427-3" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="dark">
@@ -168,7 +168,7 @@
     </div>
   </div>
 
-  <script src="/sync30/script.js?v=20260427-2"></script>
+  <script src="/sync30/script.js?v=20260427-3"></script>
   <script>
     (() => {
       const ADMIN_EMAIL = "skypieachannel" + "@" + "gmail.com";
@@ -178,19 +178,26 @@
         creator: "https://checkout.revolut.com/pay/78516714-39a6-4e2a-bef8-675ab3affa39"
       };
       const $ = (id) => document.getElementById(id);
-      function isAdminScreen() {
-        const auth = ($("authStatusText")?.textContent || "").toLowerCase();
-        return auth.includes(ADMIN_EMAIL) || ($("modeLabel")?.textContent || "").toLowerCase().includes("admin");
+      function authText() {
+        return ($("authStatusText")?.textContent || "").toLowerCase();
       }
-      function lockPublicCredits() {
-        const authText = ($("authStatusText")?.textContent || "").toLowerCase();
-        const publicMode = authText.includes("mode test public") || !authText.includes("connecté");
-        if (!isAdminScreen() && publicMode) {
-          if ($("modeLabel")) $("modeLabel").textContent = "Public";
-          if ($("creditsLabel")) $("creditsLabel").textContent = "0 s";
-          if ($("accountBadge")) $("accountBadge").textContent = "Mode test public";
-          if ($("hintText")) $("hintText").textContent = "Mode test public actif. Connecte-toi ou demande une validation admin pour générer.";
-          if ($("estimateRemainingText") && $("estimateRemainingText").textContent === "999999 s") $("estimateRemainingText").textContent = "0 s";
+      function isAdminScreen() {
+        return authText().includes(ADMIN_EMAIL) || ($("modeLabel")?.textContent || "").toLowerCase().includes("admin");
+      }
+      function hasUnlimitedDisplayed() {
+        const credits = ($("creditsLabel")?.textContent || "").toLowerCase();
+        const estimate = ($("estimateRemainingText")?.textContent || "").toLowerCase();
+        return credits.includes("999999") || credits.includes("illimité") || estimate.includes("999999") || estimate.includes("illimité");
+      }
+      function lockNonAdminUnlimited() {
+        const admin = isAdminScreen();
+        const publicMode = authText().includes("mode test public") || !authText().includes("connecté");
+        if (!admin && (publicMode || hasUnlimitedDisplayed())) {
+          if ($("modeLabel")) $("modeLabel").textContent = publicMode ? "Public" : "Connecté";
+          if ($("creditsLabel") && hasUnlimitedDisplayed()) $("creditsLabel").textContent = "0 s";
+          if ($("accountBadge")) $("accountBadge").textContent = publicMode ? "Mode test public" : "Compte personnel";
+          if ($("hintText")) $("hintText").textContent = publicMode ? "Mode test public actif. Connecte-toi ou demande une validation admin pour générer." : "Compte connecté. Achète un pack Revolut ou attends la validation admin pour recevoir tes crédits.";
+          if ($("estimateRemainingText") && hasUnlimitedDisplayed()) $("estimateRemainingText").textContent = "0 s";
         }
       }
       function setupRevolutButtons() {
@@ -210,9 +217,9 @@
         });
       }
       window.addEventListener("load", () => {
-        lockPublicCredits();
+        lockNonAdminUnlimited();
         setupRevolutButtons();
-        setInterval(lockPublicCredits, 500);
+        setInterval(lockNonAdminUnlimited, 300);
         setInterval(setupRevolutButtons, 1500);
       });
     })();
