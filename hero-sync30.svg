@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" role="img" aria-label="Illustration Sync30 LipSync IA">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#121a30"/><stop offset=".55" stop-color="#050914"/><stop offset="1" stop-color="#02050c"/></linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9ff79"/><stop offset=".5" stop-color="#9cff4f"/><stop offset="1" stop-color="#55d528"/></linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6df5ff"/><stop offset="1" stop-color="#2788ff"/></linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d16cff"/><stop offset="1" stop-color="#6d5cff"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="shadow"><feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#000" flood-opacity=".5"/></filter>
+  </defs>
+  <rect width="900" height="520" rx="50" fill="url(#bg)"/>
+  <circle cx="740" cy="95" r="160" fill="#2ee8ff" opacity=".13"/>
+  <circle cx="180" cy="430" r="190" fill="#9cff4f" opacity=".10"/>
+  <circle cx="610" cy="395" r="170" fill="#9b7cff" opacity=".12"/>
+  <g opacity=".18"><path d="M0 120 H900 M0 240 H900 M0 360 H900" stroke="#fff"/><path d="M150 0 V520 M300 0 V520 M450 0 V520 M600 0 V520 M750 0 V520" stroke="#fff"/></g>
+  <g filter="url(#shadow)">
+    <rect x="52" y="58" width="365" height="402" rx="42" fill="rgba(255,255,255,.065)" stroke="rgba(255,255,255,.16)"/>
+    <text x="91" y="132" fill="#fff" font-family="Arial Black, Arial" font-size="42" font-weight="900">Donne vie</text>
+    <text x="91" y="184" fill="#fff" font-family="Arial Black, Arial" font-size="42" font-weight="900">à tes vidéos</text>
+    <text x="91" y="238" fill="#9cff4f" font-family="Arial Black, Arial" font-size="38" font-weight="900">IA LipSync</text>
+    <text x="92" y="294" fill="#b9c4d6" font-family="Arial" font-size="24" font-weight="700">Des mouvements de lèvres</text>
+    <text x="92" y="326" fill="#b9c4d6" font-family="Arial" font-size="24" font-weight="700">propres, rapides et réalistes.</text>
+    <rect x="92" y="371" width="235" height="58" rx="22" fill="rgba(156,255,79,.13)" stroke="#9cff4f"/>
+    <text x="119" y="408" fill="#d9ff79" font-family="Arial Black, Arial" font-size="20">Créer maintenant</text>
+  </g>
+  <g transform="translate(500 70)" filter="url(#shadow)">
+    <circle cx="155" cy="170" r="128" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)"/>
+    <circle cx="155" cy="170" r="92" fill="none" stroke="url(#green)" stroke-width="14" stroke-dasharray="370 100" filter="url(#glow)"/>
+    <circle cx="155" cy="170" r="122" fill="none" stroke="url(#cyan)" stroke-width="7" stroke-dasharray="130 90" opacity=".9"/>
+    <path d="M70 180 C105 150 130 150 160 176 C190 202 220 205 255 174" fill="none" stroke="url(#green)" stroke-width="15" stroke-linecap="round" filter="url(#glow)"/>
+    <path d="M88 250 h135" stroke="url(#purple)" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+    <path d="M110 270 h180" stroke="url(#cyan)" stroke-width="8" stroke-linecap="round" opacity=".75"/>
+    <text x="155" y="380" text-anchor="middle" fill="#fff" font-family="Arial Black, Arial" font-size="46" font-weight="900">SYNC30</text>
+    <text x="155" y="417" text-anchor="middle" fill="#b9c4d6" font-family="Arial" font-size="22" font-weight="700">Nova rapide • Astra premium</text>
+  </g>
+</svg>
