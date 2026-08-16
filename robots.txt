@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chasmet.github.io/sync30/sitemap.xml
