@@ -1,0 +1,1 @@
+document.write('<script src="/script.js?v=20260816"><\/script>');
