@@ -150,3 +150,26 @@
     setInterval(updatePanelVisibility, 700);
   });
 })();
+
+(() => {
+  function installOfferShortcut() {
+    if (document.getElementById('sync30OfferShortcut')) return;
+    const app = document.querySelector('.app');
+    const topbar = document.querySelector('.topbar');
+    if (!app || !topbar) return;
+
+    const box = document.createElement('div');
+    box.id = 'sync30OfferShortcut';
+    box.className = 'card';
+    box.style.cssText = 'border:1px solid #9cff4f;box-shadow:0 0 0 1px rgba(156,255,79,.18) inset;';
+    box.innerHTML = `
+      <div class="pill">Offres Sync30</div>
+      <h2 class="title">Crée ton lipsync IA dès 2,19 €</h2>
+      <p class="sub">Nova 30 s • Astra 30 s • Pack Créateur. Paiement sécurisé Revolut.</p>
+      <a class="btn btn-primary" href="/sync30/offre.html">Voir les packs et acheter</a>
+    `;
+    topbar.insertAdjacentElement('afterend', box);
+  }
+
+  window.addEventListener('load', installOfferShortcut);
+})();
