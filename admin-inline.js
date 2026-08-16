@@ -1,307 +1,229 @@
 (() => {
-  const ADMIN_EMAIL = "skypieachannel" + "@" + "gmail.com";
-  const ADMIN_API_URL = "https://sync30-paddle-api.onrender.com";
+  const ADMIN_EMAIL = "skypieachannel@gmail.com";
+  const API = "https://sync30-paddle-api.onrender.com";
+  const CHECKOUTS = {
+    nova: "https://checkout.revolut.com/pay/b6ca579f-e0de-4f03-9b3d-98c50839486f",
+    astra: "https://checkout.revolut.com/pay/a068d6d7-0b65-47f7-bdf4-ce953458eab6",
+    creator: "https://checkout.revolut.com/pay/78516714-39a6-4e2a-bef8-675ab3affa39"
+  };
+  const $ = (id) => document.getElementById(id);
 
-  function $(id) {
-    return document.getElementById(id);
+  function authEmail() {
+    if (typeof currentUser !== "undefined" && currentUser?.email) return String(currentUser.email).trim().toLowerCase();
+    return String($("authStatusText")?.textContent || "").replace(/^Connecté\s*:/i, "").trim().toLowerCase();
   }
 
-  function getAuthEmail() {
-    return String($("authStatusText")?.textContent || "").replace("Connecté :", "").trim().toLowerCase();
+  function isAdmin() {
+    return authEmail() === ADMIN_EMAIL || String($("modeLabel")?.textContent || "").toLowerCase().includes("admin");
   }
 
-  function isAdminVisible() {
-    return getAuthEmail() === ADMIN_EMAIL || String($("modeLabel")?.textContent || "").toLowerCase().includes("admin");
-  }
-
-  async function getToken() {
-    if (window.supabaseClient?.auth?.getSession) {
-      const { data } = await window.supabaseClient.auth.getSession();
-      return data?.session?.access_token || "";
-    }
-
-    if (typeof supabaseClient !== "undefined" && supabaseClient?.auth?.getSession) {
-      const { data } = await supabaseClient.auth.getSession();
-      return data?.session?.access_token || "";
-    }
-
-    if (window.supabase?.createClient) {
-      const localUrl = "https://hfzbkgnccyyrotijnlda.supabase.co";
-      const localKey = "sb_publishable_j_dMdudOZakRbeKQQRVWDQ_TYI2mwka";
-      const client = window.supabase.createClient(localUrl, localKey);
-      const { data } = await client.auth.getSession();
-      return data?.session?.access_token || "";
-    }
-
+  async function sessionToken() {
+    try {
+      if (typeof supabaseClient !== "undefined" && supabaseClient?.auth?.getSession) {
+        const { data } = await supabaseClient.auth.getSession();
+        return data?.session?.access_token || "";
+      }
+    } catch {}
     return "";
   }
 
-  function showAdminMessage(text, danger = false) {
-    const box = $("inlineAdminMessage");
-    if (!box) return;
-    box.textContent = text;
-    box.classList.remove("hidden");
-    box.style.color = danger ? "#ff8a8a" : "#9cff4f";
-  }
-
-  function hideAdminMessage() {
-    const box = $("inlineAdminMessage");
-    if (!box) return;
-    box.textContent = "";
-    box.classList.add("hidden");
-  }
-
-  async function adminRequest(path, { method = "GET", body } = {}) {
-    const token = await getToken();
-    if (!token) throw new Error("Session admin introuvable. Connecte-toi avec le compte administrateur.");
-
-    const options = {
-      method,
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    };
-
-    if (body !== undefined) {
-      options.headers["Content-Type"] = "application/json";
-      options.body = JSON.stringify(body);
+  async function api(path, { method = "GET", body, admin = false } = {}) {
+    const headers = {};
+    if (body !== undefined) headers["Content-Type"] = "application/json";
+    if (admin) {
+      const token = await sessionToken();
+      if (!token) throw new Error("Connecte-toi avec le compte administrateur.");
+      headers.Authorization = `Bearer ${token}`;
     }
-
-    const response = await fetch(`${ADMIN_API_URL}${path}`, options);
+    const response = await fetch(`${API}${path}`, {
+      method,
+      headers,
+      body: body === undefined ? undefined : JSON.stringify(body)
+    });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok || !data.ok) throw new Error(data.error || "Erreur serveur admin");
+    if (!response.ok || !data.ok) throw new Error(data.error || "Erreur serveur Sync30");
     return data;
   }
 
-  function formatDate(value) {
-    try {
-      return new Intl.DateTimeFormat("fr-FR", {
-        dateStyle: "short",
-        timeStyle: "short"
-      }).format(new Date(value));
-    } catch {
-      return String(value || "");
-    }
-  }
+  // Tous les achats lancés depuis l'application passent d'abord par Supabase.
+  document.addEventListener("click", async (event) => {
+    const button = event.target.closest(".buy-btn[data-pack]");
+    if (!button) return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
 
-  function packLabel(pack) {
-    if (pack === "nova") return "Nova — 2,19 €";
-    if (pack === "astra") return "Astra — 4,19 €";
-    if (pack === "creator") return "Créateur — 7,99 €";
-    return pack || "Pack";
-  }
-
-  function renderPendingPurchases(requests = []) {
-    const container = $("pendingPurchasesList");
-    const count = $("pendingPurchasesCount");
-    if (!container) return;
-
-    if (count) count.textContent = `${requests.length} en attente`;
-
-    if (!requests.length) {
-      container.innerHTML = `<div class="upload-box"><h3>Aucun achat en attente</h3><p>Les nouvelles demandes apparaîtront ici.</p></div>`;
+    const pack = String(button.dataset.pack || "").toLowerCase();
+    const email = authEmail();
+    if (!CHECKOUTS[pack]) return;
+    if (!email || email.includes("mode test public") || !email.includes("@")) {
+      alert("Connecte-toi d’abord à ton compte Sync30 avant d’acheter.");
       return;
     }
 
-    container.innerHTML = requests.map((item) => {
-      const id = String(item.id || "");
-      const email = String(item.user_email || "");
-      const pack = String(item.pack || "");
-      const creatorButtons = pack === "creator"
-        ? `<div class="stack" style="margin-top:10px;">
-             <button class="btn btn-primary" data-purchase-action="approve" data-request-id="${id}" data-approved-pack="creator_nova" type="button">Valider +110 s Nova</button>
-             <button class="btn btn-primary" data-purchase-action="approve" data-request-id="${id}" data-approved-pack="creator_astra" type="button">Valider +60 s Astra</button>
-           </div>`
-        : `<button class="btn btn-primary" style="margin-top:10px;" data-purchase-action="approve" data-request-id="${id}" type="button">Valider et créditer</button>`;
+    const old = button.textContent;
+    button.disabled = true;
+    button.textContent = "Préparation…";
+    try {
+      await api("/purchase-request", {
+        method: "POST",
+        body: { userEmail: email, pack, source: "application_sync30" }
+      });
+      window.open(CHECKOUTS[pack], "_blank", "noopener,noreferrer");
+      alert("Demande enregistrée. Termine le paiement Revolut ; l’admin vérifiera puis validera tes crédits.");
+    } catch (error) {
+      alert(error.message || String(error));
+    } finally {
+      button.disabled = false;
+      button.textContent = old;
+    }
+  }, true);
 
-      return `<div class="upload-box" style="text-align:left;">
-        <h3>${packLabel(pack)}</h3>
-        <p><strong>${email}</strong></p>
-        <p>Demande : ${formatDate(item.created_at)} • Source : ${String(item.source || "sync30")}</p>
-        ${creatorButtons}
-        <button class="btn btn-secondary" style="margin-top:8px;" data-purchase-action="reject" data-request-id="${id}" type="button">Rejeter</button>
+  function message(text, error = false) {
+    const box = $("adminQueueMessage");
+    if (!box) return;
+    box.textContent = text;
+    box.style.color = error ? "#ff9aa2" : "#9cff4f";
+  }
+
+  function label(pack) {
+    if (pack === "nova") return "Nova — 2,19 €";
+    if (pack === "astra") return "Astra — 4,19 €";
+    if (pack === "creator") return "Créateur — 7,99 €";
+    return pack;
+  }
+
+  function dateFR(value) {
+    try { return new Date(value).toLocaleString("fr-FR"); } catch { return String(value || ""); }
+  }
+
+  function renderQueue(items) {
+    const list = $("adminPurchaseQueue");
+    const count = $("adminPurchaseCount");
+    if (!list) return;
+    if (count) count.textContent = `${items.length} en attente`;
+    if (!items.length) {
+      list.innerHTML = '<div class="upload-box"><h3>Aucun achat en attente</h3><p>Les nouvelles demandes apparaîtront ici.</p></div>';
+      return;
+    }
+    list.innerHTML = items.map((p) => {
+      const approve = p.pack === "creator"
+        ? `<button class="btn btn-primary" data-admin-action="approve" data-id="${p.id}" data-credit="creator_nova">Valider +110 s Nova</button>
+           <button class="btn btn-primary" data-admin-action="approve" data-id="${p.id}" data-credit="creator_astra">Valider +60 s Astra</button>`
+        : `<button class="btn btn-primary" data-admin-action="approve" data-id="${p.id}">Valider et créditer</button>`;
+      return `<div class="upload-box" style="text-align:left">
+        <h3>${label(p.pack)}</h3>
+        <p><strong>${p.user_email}</strong><br>${dateFR(p.created_at)}</p>
+        <div class="stack">${approve}<button class="btn btn-secondary" data-admin-action="reject" data-id="${p.id}">Rejeter</button></div>
       </div>`;
     }).join("");
   }
 
-  async function loadPendingPurchases() {
-    const container = $("pendingPurchasesList");
-    if (container) container.innerHTML = `<div class="upload-box"><h3>Chargement…</h3></div>`;
-
+  async function refreshQueue() {
+    if (!isAdmin()) return;
     try {
-      const data = await adminRequest("/admin/purchase-requests");
-      renderPendingPurchases(data.requests || []);
+      const data = await api("/admin/purchase-requests", { admin: true });
+      renderQueue(data.requests || []);
     } catch (error) {
-      if (container) {
-        container.innerHTML = `<div class="upload-box"><h3>Impossible de charger</h3><p>${String(error.message || error)}</p></div>`;
-      }
+      message(error.message || String(error), true);
     }
   }
 
-  async function handlePurchaseAction(button) {
-    const action = button.dataset.purchaseAction;
-    const requestId = button.dataset.requestId;
-    const approvedPack = button.dataset.approvedPack || "";
-    if (!requestId) return;
-
+  async function action(button) {
+    const id = button.dataset.id;
+    const kind = button.dataset.adminAction;
+    if (!id) return;
     button.disabled = true;
     try {
-      if (action === "approve") {
-        const ok = confirm("Tu as vérifié le paiement dans Revolut Pro. Valider et créditer ce client ?");
-        if (!ok) return;
-        const data = await adminRequest("/admin/approve-purchase", {
-          method: "POST",
-          body: { requestId, approvedPack }
+      if (kind === "approve") {
+        if (!confirm("Paiement vérifié dans Revolut Pro ? Valider les crédits ?")) return;
+        const data = await api("/admin/approve-purchase", {
+          method: "POST", admin: true,
+          body: { requestId: id, approvedPack: button.dataset.credit || "" }
         });
-        showAdminMessage(`Achat validé : ${data.label}. Nova ${data.syncupSecondsBalance}s • Astra ${data.premiumSecondsBalance}s`);
-      } else if (action === "reject") {
-        const ok = confirm("Rejeter cette demande d’achat ?");
-        if (!ok) return;
-        await adminRequest("/admin/reject-purchase", {
-          method: "POST",
-          body: { requestId }
-        });
-        showAdminMessage("Demande rejetée.");
+        message(`Validé : ${data.label} • Nova ${data.syncupSecondsBalance}s • Astra ${data.premiumSecondsBalance}s`);
+      } else {
+        if (!confirm("Rejeter cette demande ?")) return;
+        await api("/admin/reject-purchase", { method: "POST", admin: true, body: { requestId: id } });
+        message("Demande rejetée.");
       }
-      await loadPendingPurchases();
+      await refreshQueue();
     } catch (error) {
-      showAdminMessage(error.message, true);
+      message(error.message || String(error), true);
     } finally {
       button.disabled = false;
     }
   }
 
-  function buildAdminPanel() {
-    if ($("inlineAdminPanel")) return;
-
-    const panel = document.createElement("div");
-    panel.id = "inlineAdminPanel";
-    panel.className = "card hidden";
-    panel.innerHTML = `
-      <div class="pill">Administration Sync30</div>
+  function buildAdmin() {
+    if ($("sync30AdminQueue")) return;
+    const card = document.createElement("div");
+    card.id = "sync30AdminQueue";
+    card.className = "card hidden";
+    card.innerHTML = `
+      <div class="pill">ADMIN SYNC30</div>
       <h2 class="title">Achats à autoriser</h2>
-      <p class="sub">Le client lance son achat. Tu vérifies le paiement dans Revolut Pro puis tu valides ici. Les crédits sont ajoutés dans Supabase.</p>
-
-      <div class="status-row" style="grid-template-columns:1fr auto;align-items:center;margin-bottom:14px;">
-        <div class="mini-box"><div class="label">File d’attente</div><div class="value" id="pendingPurchasesCount">—</div></div>
-        <button class="btn btn-secondary" id="refreshPurchasesBtn" type="button" style="width:auto;">Actualiser</button>
+      <p class="sub">Vérifie le paiement dans Revolut Pro, puis valide ici. Les crédits sont écrits dans Supabase.</p>
+      <div class="status-row" style="grid-template-columns:1fr auto;align-items:center">
+        <div class="mini-box"><div class="label">File</div><div class="value" id="adminPurchaseCount">—</div></div>
+        <button class="btn btn-secondary" id="adminRefreshPurchases" style="width:auto">Actualiser</button>
       </div>
-
-      <div id="pendingPurchasesList" class="stack">
-        <div class="upload-box"><h3>Chargement…</h3></div>
-      </div>
-
-      <hr style="border:0;border-top:1px solid rgba(255,255,255,.12);margin:22px 0;" />
-      <h2 class="title">Ajout manuel</h2>
-      <p class="sub">À utiliser seulement si tu dois créditer un client manuellement.</p>
-
-      <div class="stack">
-        <div class="upload-box" style="text-align:left;">
-          <h3>Email du client</h3>
-          <input id="inlineClientEmail" type="email" placeholder="client@gmail.com" autocomplete="email" style="width:100%;min-height:58px;border-radius:20px;border:1px solid rgba(255,255,255,.22);padding:14px 16px;background:rgba(0,0,0,.24);color:white;font-size:17px;font-weight:800;" />
+      <div id="adminPurchaseQueue" class="stack" style="margin-top:14px"></div>
+      <p id="adminQueueMessage" class="hint"></p>
+      <details class="info-collapse" style="margin-top:16px">
+        <summary class="info-summary">Ajout manuel de secours</summary>
+        <div class="info-content stack">
+          <input id="adminManualEmail" type="email" placeholder="client@email.com" style="width:100%;min-height:52px;border-radius:15px;padding:12px;background:#07101f;color:#fff;border:1px solid rgba(255,255,255,.2)">
+          <select id="adminManualPack" class="engine-select"><option value="nova">Nova +30 s</option><option value="astra">Astra +30 s</option><option value="creator_nova">Créateur +110 s Nova</option><option value="creator_astra">Créateur +60 s Astra</option></select>
+          <button class="btn btn-primary" id="adminManualCredit">Ajouter les crédits</button>
         </div>
+      </details>`;
+    const account = Array.from(document.querySelectorAll(".card")).find((c) => c.textContent.includes("Compte"));
+    if (account) account.insertAdjacentElement("afterend", card);
+    else document.querySelector(".app")?.prepend(card);
 
-        <div class="upload-box" style="text-align:left;">
-          <h3>Pack payé</h3>
-          <select id="inlinePackSelect" class="engine-select">
-            <option value="nova">Nova 2,19 € - +30 s Nova</option>
-            <option value="astra">Astra 4,19 € - +30 s Astra</option>
-            <option value="creator_nova">Créateur 7,99 € - +110 s Nova</option>
-            <option value="creator_astra">Créateur 7,99 € - +60 s Astra</option>
-          </select>
-        </div>
-
-        <button class="btn btn-secondary" id="inlineFindClientBtn" type="button">Vérifier le client</button>
-        <button class="btn btn-primary" id="inlineValidateCreditsBtn" type="button">Ajouter les crédits</button>
-        <p class="warning hidden" id="inlineAdminMessage"></p>
-      </div>
-    `;
-
-    const accountCard = Array.from(document.querySelectorAll(".card")).find(card => card.textContent.includes("Compte"));
-    if (accountCard) accountCard.insertAdjacentElement("afterend", panel);
-    else document.querySelector(".app")?.appendChild(panel);
-
-    $("refreshPurchasesBtn")?.addEventListener("click", loadPendingPurchases);
-
-    $("pendingPurchasesList")?.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-purchase-action]");
-      if (button) handlePurchaseAction(button);
+    $("adminRefreshPurchases")?.addEventListener("click", refreshQueue);
+    $("adminPurchaseQueue")?.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-admin-action]");
+      if (b) action(b);
     });
-
-    $("inlineFindClientBtn")?.addEventListener("click", async () => {
-      hideAdminMessage();
+    $("adminManualCredit")?.addEventListener("click", async () => {
       try {
-        const email = String($("inlineClientEmail")?.value || "").trim().toLowerCase();
-        if (!email) throw new Error("Entre l’email du client.");
-        const data = await adminRequest("/admin/find-user", {
-          method: "POST",
-          body: { userEmail: email }
-        });
-        showAdminMessage(`Client trouvé. Nova : ${data.syncupSecondsBalance}s • Astra : ${data.premiumSecondsBalance}s`);
-      } catch (error) {
-        showAdminMessage(error.message, true);
-      }
-    });
-
-    $("inlineValidateCreditsBtn")?.addEventListener("click", async () => {
-      hideAdminMessage();
-      try {
-        const email = String($("inlineClientEmail")?.value || "").trim().toLowerCase();
-        const pack = String($("inlinePackSelect")?.value || "");
-        if (!email) throw new Error("Entre l’email du client.");
-        const ok = confirm(`Ajouter les crédits à ${email} ?`);
-        if (!ok) return;
-        const data = await adminRequest("/admin/add-credits", {
-          method: "POST",
-          body: { userEmail: email, pack }
-        });
-        showAdminMessage(`Crédits ajoutés : ${data.label}. Nova ${data.syncupSecondsBalance}s • Astra ${data.premiumSecondsBalance}s`);
-      } catch (error) {
-        showAdminMessage(error.message, true);
-      }
+        const email = String($("adminManualEmail")?.value || "").trim().toLowerCase();
+        const pack = $("adminManualPack")?.value;
+        if (!email) throw new Error("Email client manquant");
+        const data = await api("/admin/add-credits", { method: "POST", admin: true, body: { userEmail: email, pack } });
+        message(`Crédits ajoutés : ${data.label}`);
+      } catch (error) { message(error.message || String(error), true); }
     });
   }
 
-  let wasVisible = false;
-  function updatePanelVisibility() {
-    buildAdminPanel();
-    const panel = $("inlineAdminPanel");
-    if (!panel) return;
-    const visible = isAdminVisible();
-    if (visible) panel.classList.remove("hidden");
-    else panel.classList.add("hidden");
-
-    if (visible && !wasVisible) loadPendingPurchases();
-    wasVisible = visible;
-  }
-
-  window.addEventListener("load", () => {
-    updatePanelVisibility();
-    setInterval(updatePanelVisibility, 700);
-    setInterval(() => {
-      if (isAdminVisible()) loadPendingPurchases();
-    }, 30000);
-  });
-})();
-
-(() => {
   function installOfferShortcut() {
-    if (document.getElementById("sync30OfferShortcut")) return;
+    if ($("sync30OfferShortcut")) return;
     const topbar = document.querySelector(".topbar");
     if (!topbar) return;
-
     const box = document.createElement("div");
     box.id = "sync30OfferShortcut";
     box.className = "card";
-    box.style.cssText = "border:1px solid #9cff4f;box-shadow:0 0 0 1px rgba(156,255,79,.18) inset;";
-    box.innerHTML = `
-      <div class="pill">Offres Sync30</div>
-      <h2 class="title">Crée ton lipsync IA dès 2,19 €</h2>
-      <p class="sub">Nova 30 s • Astra 30 s • Pack Créateur. Paiement sécurisé Revolut.</p>
-      <a class="btn btn-primary" href="/sync30/offre.html">Voir les packs et acheter</a>
-    `;
+    box.innerHTML = '<div class="pill">Offres Sync30</div><h2 class="title">Lipsync IA dès 2,19 €</h2><p class="sub">Nova • Astra • Créateur — paiement Revolut.</p><a class="btn btn-primary" href="/sync30/offre.html">Voir les packs</a>';
     topbar.insertAdjacentElement("afterend", box);
   }
 
-  window.addEventListener("load", installOfferShortcut);
+  let shown = false;
+  function syncAdminVisibility() {
+    buildAdmin();
+    const card = $("sync30AdminQueue");
+    if (!card) return;
+    const yes = isAdmin();
+    card.classList.toggle("hidden", !yes);
+    if (yes && !shown) refreshQueue();
+    shown = yes;
+  }
+
+  window.addEventListener("load", () => {
+    installOfferShortcut();
+    syncAdminVisibility();
+    setInterval(syncAdminVisibility, 800);
+    setInterval(() => { if (isAdmin()) refreshQueue(); }, 30000);
+  });
 })();
