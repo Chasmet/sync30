@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sync30-numerique.vercel.app/sitemap.xml
