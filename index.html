@@ -64,7 +64,8 @@
     .apps-shell{border-radius:22px;padding:24px}.app-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
     .app-tab{border:1px solid #223d67;background:#09152a;color:#dce7fb;padding:14px 10px;border-radius:14px;cursor:pointer;min-height:118px;text-align:center;transition:.18s}
     .app-tab.active{border-color:#735cff;background:linear-gradient(180deg,rgba(99,69,255,.18),rgba(8,31,59,.95));box-shadow:0 0 28px rgba(78,85,255,.15)}
-    .app-icon{width:52px;height:52px;border-radius:14px;margin:0 auto 8px;display:grid;place-items:center;font-size:25px;background:linear-gradient(145deg,#2c1b5e,#0e74aa);border:1px solid #6251d9}
+    .app-icon{width:64px;height:64px;border-radius:16px;margin:0 auto 10px;display:grid;place-items:center;overflow:hidden;background:#081326;border:1px solid rgba(112,126,255,.38);box-shadow:0 10px 28px rgba(0,0,0,.26)}
+    .app-icon img{width:100%;height:100%;display:block;object-fit:cover}
     .app-tab strong{display:block}.app-tab span{display:block;color:#94a8c7;font-size:12px;margin-top:3px}
     .app-detail{margin-top:14px;border-radius:16px;padding:22px;border:1px solid #1d365d;background:#08152a;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
     .app-detail h3{margin:0 0 7px;font-size:24px}.app-detail p{margin:0;color:#aebdd5;max-width:760px}.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}.chip{padding:6px 9px;border-radius:999px;background:#10233f;color:#a9dfff;border:1px solid #23476f;font-size:12px}
@@ -135,11 +136,11 @@
       </div>
       <div class="apps-shell glass">
         <div class="app-tabs" role="tablist" aria-label="Applications">
-          <button class="app-tab active" data-app="sync30"><span class="app-icon">🎙</span><strong>Sync30 LipSync IA</strong><span>Synchronisation labiale</span></button>
-          <button class="app-tab" data-app="rush"><span class="app-icon">🎬</span><strong>Rush Studio</strong><span>Création vidéo</span></button>
-          <button class="app-tab" data-app="model"><span class="app-icon">◈</span><strong>Modéliseur 3D</strong><span>Création 3D</span></button>
-          <button class="app-tab" data-app="viral"><span class="app-icon">〽</span><strong>ViralVoice</strong><span>Voix & création IA</span></button>
-          <button class="app-tab" data-app="notes"><span class="app-icon">▤</span><strong>Bloc-note</strong><span>Notes rapides</span></button>
+          <button class="app-tab active" data-app="sync30"><span class="app-icon"><img src="/logo.svg" alt="Logo Sync30 LipSync IA"></span><strong>Sync30 LipSync IA</strong><span>Synchronisation labiale</span></button>
+          <button class="app-tab" data-app="rush"><span class="app-icon"><img src="https://raw.githubusercontent.com/Chasmet/rush-studio/main/rush-icon-512.png" alt="Logo Rush Studio" loading="lazy"></span><strong>Rush Studio</strong><span>Création vidéo</span></button>
+          <button class="app-tab" data-app="model"><span class="app-icon"><img src="/assets/modeliseur-3d.svg" alt="Logo Modéliseur 3D" loading="lazy"></span><strong>Modéliseur 3D</strong><span>Création 3D</span></button>
+          <button class="app-tab" data-app="viral"><span class="app-icon"><img src="https://raw.githubusercontent.com/Chasmet/ViralVoice/main/icon-512.png" alt="Logo ViralVoice" loading="lazy"></span><strong>ViralVoice</strong><span>Voix & création IA</span></button>
+          <button class="app-tab" data-app="notes"><span class="app-icon"><img src="https://raw.githubusercontent.com/Chasmet/Bloc-note/main/logo.svg" alt="Logo Bloc-note" loading="lazy"></span><strong>Bloc-note</strong><span>Notes rapides</span></button>
         </div>
         <div class="app-detail" id="appDetail">
           <div>
