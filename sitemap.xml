@@ -4,4 +4,6 @@
   <url><loc>https://sync30.pntr.dev/mentions-legales.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://sync30.pntr.dev/confidentialite.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://sync30.pntr.dev/sync30/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sync30.pntr.dev/applications/mon-coran.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sync30.pntr.dev/actualites/rush-studio-android.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
