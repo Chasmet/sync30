@@ -18,7 +18,7 @@ Retrouvez l'article de lancement et les informations détaillées dans [notre an
 
 - **Rush Studio :** organisation, tâches et courses — https://play.google.com/store/apps/details?id=com.chk.rushstudio
 - **Mes Notes & Dossiers :** notes et dossiers — https://play.google.com/store/apps/details?id=com.sync30.mesnotesdossiers
-- **Mon Coran – Lire & Écouter :** les 114 sourates, lecture et audio ; application 100 % gratuite, en préparation pour Google Play — https://sync30.pntr.dev/applications/mon-coran.html
+- **Mon Coran – Lire & Écouter :** les 114 sourates, lecture et audio ; application 100 % gratuite, disponible sur Google Play — https://play.google.com/store/apps/details?id=com.sync30.moncoran ; présentation : https://sync30.pntr.dev/applications/mon-coran.html
 
 ## Autres créations numériques
 
