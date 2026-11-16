@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Sync 30 Numérique — Développement d'applications et solutions numériques</title>
-  <meta name="description" content="Sync 30 Numérique conçoit des applications Android, outils IA, solutions multimédia et logiciels sur mesure en France.">
+  <meta name="description" content="Sync 30 Numérique : Rush Studio et Mes Notes & Dossiers sur Google Play, Mon Coran – Lire & Écouter en préparation. Applications Android et solutions numériques.">
   <meta name="theme-color" content="#050b18">
   <link rel="canonical" href="https://sync30.pntr.dev/">
   <meta property="og:title" content="Sync 30 Numérique">
@@ -81,6 +81,28 @@
     @media(max-width:560px){
       .wrap{padding:0 16px}nav{height:68px}.nav-cta{display:none}.hero{padding-top:42px}.device-stage{min-height:340px}.phone.main{right:18%;width:174px;height:350px}.phone.side1{right:57%;width:130px;height:278px;top:74px}.phone.side2{right:-2%;width:128px;height:264px;top:91px}.screen strong{font-size:23px}.trust{grid-template-columns:1fr 1fr}.section-head h2{font-size:30px}.app-tabs{grid-template-columns:1fr 1fr}.app-detail{grid-template-columns:1fr}.services{grid-template-columns:1fr}.fact{grid-template-columns:1fr;gap:3px}.section-head{align-items:start;flex-direction:column}
     }
+
+    .featured-apps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
+    .featured-app{border-radius:22px;padding:25px;display:flex;flex-direction:column;min-width:0}
+    .featured-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-height:84px}
+    .featured-icon{height:82px;width:82px;border-radius:19px;object-fit:cover;background:#0a2232;border:1px solid rgba(130,174,222,.3);box-shadow:0 12px 25px rgba(0,0,0,.28)}
+    .availability{font-size:11px;line-height:1.3;padding:7px 10px;border-radius:999px;border:1px solid;max-width:142px;text-align:center;font-weight:750}
+    .availability.live{color:#9cf0cf;background:#123a36;border-color:#286c58}
+    .availability.upcoming{color:#e6d09f;background:#3b321d;border-color:#78613b}
+    .featured-app h3{font-size:26px;letter-spacing:-.02em;margin:19px 0 4px;line-height:1.15}
+    .featured-sub{color:#8ce0ff!important;font-weight:700;margin:0 0 12px!important}
+    .featured-app p{color:#b8c7dc;font-size:15px;line-height:1.65}
+    .featured-tags{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 23px}
+    .featured-tags span{background:#122540;border:1px solid #29416a;border-radius:99px;color:#c0dfff;padding:5px 8px;font-size:12px}
+    .featured-link{margin-top:auto;background:linear-gradient(90deg,#7546fa,#098bd7);border-radius:12px;padding:13px 15px;display:block;text-align:center;font-weight:800;border:1px solid transparent}
+    .featured-link:hover{filter:brightness(1.1);transform:translateY(-1px)}
+    .secondary-link{background:transparent;border-color:#58786c;color:#caf4dd}
+    .featured-coran{border-color:#2d665b}
+    .other-products{margin-top:22px;padding:17px 20px;border:1px solid #213a61;border-radius:14px;background:rgba(9,22,44,.58)}
+    .other-products p{color:#a9bbd3;margin:5px 0 0;font-size:14px}
+    .other-products a{color:#87deff;text-decoration:underline;text-underline-offset:3px}
+    @media(max-width:1000px){.featured-apps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:680px){.featured-apps{grid-template-columns:1fr}.featured-app{padding:21px}.availability{max-width:150px}}
   </style>
 </head>
 <body>
@@ -128,28 +150,49 @@
     </div>
   </section>
 
-  <section id="applications">
+  <section id="applications" aria-labelledby="apps-heading">
     <div class="wrap">
       <div class="section-head">
-        <div><h2>Nos applications</h2><p>Des outils pour créer, modéliser, organiser et produire plus efficacement.</p></div>
-        <a class="btn ghost" href="#services">Voir nos services →</a>
+        <div><h2 id="apps-heading">Nos applications Android</h2><p>Découvrez nos créations, leurs fonctionnalités et leur disponibilité réelle sur Google Play.</p></div>
       </div>
-      <div class="apps-shell glass">
-        <div class="app-tabs" role="tablist" aria-label="Applications">
-          <button class="app-tab active" data-app="sync30"><span class="app-icon"><img src="/logo.svg" alt="Logo Sync30 LipSync IA"></span><strong>Sync30 LipSync IA</strong><span>Synchronisation labiale</span></button>
-          <button class="app-tab" data-app="rush"><span class="app-icon"><img src="https://raw.githubusercontent.com/Chasmet/rush-studio/main/rush-icon-512.png" alt="Logo Rush Studio" loading="lazy"></span><strong>Rush Studio</strong><span>Organisation &amp; courses</span></button>
-          <button class="app-tab" data-app="model"><span class="app-icon"><img src="/assets/modeliseur-3d.svg" alt="Logo Modéliseur 3D" loading="lazy"></span><strong>Modéliseur 3D</strong><span>Création 3D</span></button>
-          <button class="app-tab" data-app="viral"><span class="app-icon"><img src="https://raw.githubusercontent.com/Chasmet/ViralVoice/main/icon-512.png" alt="Logo ViralVoice" loading="lazy"></span><strong>ViralVoice</strong><span>Voix & création IA</span></button>
-          <button class="app-tab" data-app="notes"><span class="app-icon"><img src="https://raw.githubusercontent.com/Chasmet/Bloc-note/main/logo.svg" alt="Logo Bloc-note" loading="lazy"></span><strong>Bloc-note</strong><span>Notes rapides</span></button>
-        </div>
-        <div class="app-detail" id="appDetail">
-          <div>
-            <h3 id="appTitle">Sync30 LipSync IA</h3>
-            <p id="appDesc">Application de synchronisation labiale assistée par IA pour adapter les mouvements des lèvres d'une vidéo à une piste audio.</p>
-            <div class="chips" id="appChips"><span class="chip">IA</span><span class="chip">Vidéo</span><span class="chip">Android & Web</span></div>
+      <div class="featured-apps">
+        <article class="featured-app glass">
+          <div class="featured-top">
+            <img class="featured-icon" src="https://raw.githubusercontent.com/Chasmet/rush-studio/main/rush-icon-512.png" width="82" height="82" alt="Icône officielle Rush Studio" loading="lazy">
+            <span class="availability live">Disponible sur Google Play</span>
           </div>
-          <a class="btn primary" id="appLink" href="/sync30/">Ouvrir l'application →</a>
-        </div>
+          <h3>Rush Studio</h3>
+          <p class="featured-sub">Organisation, tâches, rendez-vous et courses</p>
+          <p>Regroupez vos tâches et rendez-vous, préparez vos listes de courses, renseignez les quantités et les prix, et suivez votre budget d'achats.</p>
+          <div class="featured-tags"><span>Productivité</span><span>Listes de courses</span><span>Budget</span></div>
+          <a class="featured-link" href="https://play.google.com/store/apps/details?id=com.chk.rushstudio" target="_blank" rel="noopener noreferrer" aria-label="Voir Rush Studio sur Google Play">Voir sur Google Play →</a>
+        </article>
+        <article class="featured-app glass">
+          <div class="featured-top">
+            <img class="featured-icon" src="https://raw.githubusercontent.com/Chasmet/Bloc-note/main/app/src/main/res/drawable-nodpi/ic_note_brand.jpg" width="82" height="82" alt="Icône officielle Mes Notes &amp; Dossiers" loading="lazy">
+            <span class="availability live">Disponible sur Google Play</span>
+          </div>
+          <h3>Mes Notes &amp; Dossiers</h3>
+          <p class="featured-sub">Vos notes et vos dossiers au même endroit</p>
+          <p>Créez et organisez vos notes, classez-les par dossiers et retrouvez facilement les informations que vous souhaitez conserver.</p>
+          <div class="featured-tags"><span>Notes</span><span>Dossiers</span><span>Organisation</span></div>
+          <a class="featured-link" href="https://play.google.com/store/apps/details?id=com.sync30.mesnotesdossiers" target="_blank" rel="noopener noreferrer" aria-label="Voir Mes Notes et Dossiers sur Google Play">Voir sur Google Play →</a>
+        </article>
+        <article class="featured-app glass featured-coran">
+          <div class="featured-top">
+            <img class="featured-icon" src="/assets/mon-coran.svg" width="82" height="82" alt="Icône de Mon Coran – Lire &amp; Écouter" loading="lazy">
+            <span class="availability upcoming">Prochainement sur Google Play</span>
+          </div>
+          <h3>Mon Coran – Lire &amp; Écouter</h3>
+          <p class="featured-sub">Les 114 sourates en lecture et en audio</p>
+          <p>Lisez le Coran en arabe, français et anglais, écoutez les récitations, enregistrez vos favoris et retrouvez votre progression. Application 100 % gratuite, sans publicité et sans achat intégré.</p>
+          <div class="featured-tags"><span>114 sourates</span><span>3 langues</span><span>100 % gratuite</span></div>
+          <a class="featured-link secondary-link" href="/applications/mon-coran.html" aria-label="Découvrir Mon Coran – Lire et Écouter">Découvrir l'application →</a>
+        </article>
+      </div>
+      <div class="other-products">
+        <strong>Nos autres projets numériques</strong>
+        <p><a href="/sync30/">Sync30 LipSync IA</a> · Modéliseur 3D · ViralVoice. Ces créations sont présentées séparément des applications disponibles sur Google Play.</p>
       </div>
     </div>
   </section>
@@ -159,7 +202,7 @@
       <div class="panel glass" style="padding:30px;margin:24px 0 46px">
         <p style="color:#67f0c0;font-weight:750;margin:0 0 10px">NOUVEAU SUR GOOGLE PLAY</p>
         <h2>Rush Studio : vos tâches, rendez-vous et listes de courses au même endroit</h2>
-        <p>Découvrez Rush Studio pour Android. Organisez vos affaires et vos courses avec le suivi des quantités, prix et budget. Trois jours d'accès offerts, puis Premium à 0,49 € TTC en achat unique, sans abonnement.</p>
+        <p>Découvrez Rush Studio pour Android. Organisez vos tâches, rendez-vous et listes de courses, avec le suivi des quantités, des prix et de votre budget. Retrouvez toutes les informations sur sa fiche Google Play.</p>
         <div class="cta"><a class="btn primary" href="https://play.google.com/store/apps/details?id=com.chk.rushstudio" rel="noopener">Installer Rush Studio sur Google Play →</a><a class="btn ghost" href="/actualites/rush-studio-android.html">Lire l'annonce →</a></div>
       </div>
     </div>
@@ -226,21 +269,6 @@
 </footer>
 
 <script>
-  const appData = {
-    sync30:{title:"Sync30 LipSync IA",desc:"Application de synchronisation labiale assistée par IA pour adapter les mouvements des lèvres d'une vidéo à une piste audio.",chips:["IA","Vidéo","Android & Web"],link:"/sync30/",label:"Ouvrir l'application →"},
-    rush:{title:"Rush Studio",desc:"Organisez tâches, rendez-vous, notes et listes de courses : quantités, prix et budget. Trois jours offerts puis Premium à 0,49 € en achat unique, sans abonnement.",chips:["Productivité","Courses","Android"],link:"https://play.google.com/store/apps/details?id=com.chk.rushstudio",label:"Installer sur Google Play →"},
-    model:{title:"Modéliseur 3D",desc:"Outil de création de modèles 3D à partir d'images, conçu pour simplifier les workflows de génération et de visualisation 3D.",chips:["3D","Création","Android"],link:"#contact",label:"En savoir plus →"},
-    viral:{title:"ViralVoice",desc:"Application orientée création vocale et multimédia assistée par IA, conçue pour accélérer la production de contenus.",chips:["Voix","IA","Multimédia"],link:"#contact",label:"En savoir plus →"},
-    notes:{title:"Bloc-note",desc:"Application légère de prise de notes pour enregistrer rapidement des idées, listes et informations utiles.",chips:["Productivité","Notes","Android"],link:"#contact",label:"En savoir plus →"}
-  };
-  document.querySelectorAll('.app-tab').forEach(btn=>btn.addEventListener('click',()=>{
-    document.querySelectorAll('.app-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
-    const d=appData[btn.dataset.app];
-    document.getElementById('appTitle').textContent=d.title;
-    document.getElementById('appDesc').textContent=d.desc;
-    document.getElementById('appChips').innerHTML=d.chips.map(c=>'<span class="chip">'+c+'</span>').join('');
-    const l=document.getElementById('appLink'); l.href=d.link; l.textContent=d.label;
-  }));
   document.getElementById('mobileMenu').addEventListener('click',()=>{
     const m=document.getElementById('mobileLinks'); m.style.display=m.style.display==='none'?'block':'none';
   });
